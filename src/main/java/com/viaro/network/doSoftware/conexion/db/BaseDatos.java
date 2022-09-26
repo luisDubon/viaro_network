@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 @Service
-public class BaseDatos {
+public class BaseDatos extends ConexionDB {
     public Connection conn = null;
     public PreparedStatement sentencia;
     public CallableStatement sentenciaFuncion;

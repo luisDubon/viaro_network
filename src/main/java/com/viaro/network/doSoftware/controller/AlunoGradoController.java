@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
+import java.util.List;
 
 @RestController()
 @RequestMapping(value = "alumnoGrados")
@@ -15,7 +16,7 @@ public class AlunoGradoController {
     private AlumnoGradosService service;
 
     @GetMapping(value = "/list")
-    public LinkedList<AlumnoGrado> getList(){
+    public List<AlumnoGrado> getList(){
         return service.getGrados();
     }
 

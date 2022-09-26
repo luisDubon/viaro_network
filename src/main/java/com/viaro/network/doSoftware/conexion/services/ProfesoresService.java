@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class ProfesoresService {
@@ -15,38 +16,28 @@ public class ProfesoresService {
 
     public ProfesoresService(){}
 
-    public LinkedList<Profesor> getProfesores(){
-        LinkedList<Profesor> resultado = null;
+    public List<Profesor> getProfesores(){
         try{
-            db.conectarDB();
             String sql = "SELECT PR_ID, PR_NOMBRE, PR_APELLIDOS, IF(PR_GENERO='M','Masculino','Femenino') FROM PROFESOR ORDER BY PR_ID ASC";
-            ResultSet rs = db.consulta(sql);
-            resultado = new LinkedList<>();
-            while(rs.next()){
-                resultado.add(new Profesor(rs.getInt(1),rs.getString(2),
-                        rs.getString(3),rs.getString(4)));
-            }
+
+            return  db.getList(sql,(rs, i)->{
+                Profesor profesor =new Profesor(rs.getInt(1),rs.getString(2),
+                        rs.getString(3),rs.getString(4));
+                return profesor;
+            });
         }catch (Exception e){
             e.printStackTrace();
-        }finally {
-            db.desconectarBDD();
         }
-        System.out.println(resultado);
-        return resultado;
+        return null;
     }
 
     public void delete(Long id) {
         try{
-            db.conectarDB();
             String dml = "{call P_DELETE_PROFESOR(?) }";
-            db.dml(dml,id);
-            db.commit();
+            db.call(dml,id);
         }catch (Exception e){
             e.printStackTrace();
-        }finally {
-            db.desconectarBDD();
         }
-
     }
 
     public boolean create(Profesor profesor) {
